@@ -5,7 +5,7 @@ output_file = 'video.avi'
 frames_per_second = 30
 number_of_frames = 3600
 
-# Open a connection to the d efault camera
+# Open a connection to the default camera
 cap = cv2.VideoCapture(0)
 
 # Get the size of the frames from the camera
