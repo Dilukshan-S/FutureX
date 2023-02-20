@@ -59,6 +59,52 @@ class MyApp extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff2E4450),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 70),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      "Play Demo",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xffF6F6F7),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff10217D),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 70),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                      "Get Started",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xffF6F6F7),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
