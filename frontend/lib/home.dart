@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
               ],
             ),
             Expanded(child: SizedBox()),
-            Image.asset("assets/home_logo.png", width: 300),
+            Image.asset("assets/logo.png", width: 300),
             SizedBox(
               height: 40,
             ),
