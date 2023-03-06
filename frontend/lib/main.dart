@@ -105,6 +105,28 @@ class MyApp extends StatelessWidget {
                   ),
                 ],
               ),
+              Expanded(child: SizedBox()),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: EdgeInsets.only(right: 25),
+                  child: Stack(
+                    children: [
+                      Image.asset("assets/youtube.png", width: 33, height: 35),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 25, top: 50),
+                        child: Image.asset("assets/instagram.png",
+                            width: 30, height: 30),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 25, top: 100),
+                        child: Image.asset("assets/facebook.png",
+                            width: 30, height: 30),
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),
