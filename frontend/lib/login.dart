@@ -135,6 +135,42 @@ class Login extends StatelessWidget {
                           SizedBox(
                             height: 15,
                           ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: true,
+                                onChanged: (value) async {},
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Remember me",
+                                style: GoogleFonts.poppins(
+                                    color: Color(0xffB6B8C2),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Text(
+                                      "Forgot Password?",
+                                      style: GoogleFonts.poppins(
+                                          color: Color(0xff00C0FF),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 80,
                           ),
