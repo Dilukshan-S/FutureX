@@ -100,7 +100,7 @@ while time.time() <t_end:
     detectionFrame = frame[videoHeight//2:realHeight-videoHeight//2, videoWidth//2:realWidth-videoWidth//2, :]
 
     # Construct Gaussian Pyramid
-    videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
+     videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
     fourierTransform = np.fft.fft(videoGauss, axis=0)
 
     # Bandpass Filter
