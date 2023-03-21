@@ -5,8 +5,8 @@ import 'package:mindrate/auth.dart';
 
 import 'login.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class LandingPage extends StatelessWidget {
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class Home extends StatelessWidget {
               ],
             ),
             Expanded(child: SizedBox()),
-            Image.asset("assets/home_logo.png", width: 300),
+            Image.asset("assets/landing_logo.png", width: 300),
             SizedBox(
               height: 40,
             ),
