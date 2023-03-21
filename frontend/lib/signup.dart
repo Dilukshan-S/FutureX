@@ -2,40 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mindrate/signup.dart';
+import 'package:mindrate/login.dart';
 
-class Login extends StatelessWidget {
-  Login({Key? key}) : super(key: key);
-
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  void signIn(BuildContext context) async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email');
-      } else if (e.code == 'wrong-password') {
-        print('Incorrect Password');
-      } else if (e.code == 'invalid-email') {
-        print('Email is invalid');
-      }
-    }
-
-    Navigator.pop(context);
-  }
+class SignUp extends StatelessWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +30,6 @@ class Login extends StatelessWidget {
               child: Container(
                 color: Color(0xff2E4450),
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   children: [
                     SizedBox(
                       height: 30,
@@ -75,7 +44,7 @@ class Login extends StatelessWidget {
                             height: 50,
                           ),
                           Text(
-                            "Login with",
+                            "Signup with",
                             style: GoogleFonts.ubuntu(
                                 color: Color(0xffDBDBE1),
                                 fontSize: 30,
@@ -84,18 +53,38 @@ class Login extends StatelessWidget {
                           SizedBox(
                             height: 40,
                           ),
-                          Text(
-                            "Email",
-                            style: GoogleFonts.poppins(
-                                color: Color(0xffB6B8C2),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
+                          TextField(
+                              style: GoogleFonts.poppins(
+                                  color: Color(0xffA4A6B3),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400),
+                              decoration: InputDecoration(
+                                suffixIcon: Padding(
+                                  padding: EdgeInsets.only(right: 20),
+                                  child: Icon(Icons.person_outline,
+                                      color: Color(0xffA4A6B3)),
+                                ),
+                                hintText: "Enter your Name",
+                                hintStyle: GoogleFonts.poppins(
+                                    color: Color(0xffA4A6B3),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff00C0FF), width: 1.5),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff696D77)),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              )),
                           SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           TextField(
-                              controller: emailController,
                               style: GoogleFonts.poppins(
                                   color: Color(0xffA4A6B3),
                                   fontSize: 18,
@@ -124,20 +113,9 @@ class Login extends StatelessWidget {
                                 ),
                               )),
                           SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            "Password",
-                            style: GoogleFonts.poppins(
-                                color: Color(0xffB6B8C2),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           TextField(
-                              controller: passwordController,
                               style: GoogleFonts.poppins(
                                   color: Color(0xffA4A6B3),
                                   fontSize: 18,
@@ -167,50 +145,43 @@ class Login extends StatelessWidget {
                                 ),
                               )),
                           SizedBox(
-                            height: 15,
+                            height: 20,
                           ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: true,
-                                onChanged: (value) async {},
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                "Remember me",
-                                style: GoogleFonts.poppins(
-                                    color: Color(0xffB6B8C2),
+                          TextField(
+                              style: GoogleFonts.poppins(
+                                  color: Color(0xffA4A6B3),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400),
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                suffixIcon: Padding(
+                                  padding: EdgeInsets.only(right: 20),
+                                  child: Icon(Icons.visibility_outlined,
+                                      color: Color(0xffA4A6B3)),
+                                ),
+                                hintText: "Re-enter Password",
+                                hintStyle: GoogleFonts.poppins(
+                                    color: Color(0xffA4A6B3),
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: Text(
-                                      "Forgot Password?",
-                                      style: GoogleFonts.poppins(
-                                          color: Color(0xff00C0FF),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff00C0FF), width: 1.5),
                                 ),
-                              ),
-                            ],
-                          ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff696D77)),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              )),
                           SizedBox(
                             height: 80,
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              signIn(context);
+                              FirebaseAuth.instance.signOut();
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xffAAA3E9)),
@@ -219,7 +190,7 @@ class Login extends StatelessWidget {
                                 height: 50,
                                 child: Center(
                                   child: Text(
-                                    "Login",
+                                    "Signup",
                                     style: GoogleFonts.poppins(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -228,20 +199,16 @@ class Login extends StatelessWidget {
                                 )),
                           ),
                           SizedBox(
-                            height: 60,
+                            height: 35,
                           ),
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: GestureDetector(
-                              onTap: () => {
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (_) => SignUp()))
-                              },
+                              onTap: () => Navigator.push(context,
+                                  CupertinoPageRoute(builder: (_) => Login())),
                               child: RichText(
                                 text: TextSpan(
-                                    text: 'Don\'t have an account?  ',
+                                    text: 'Do you have an account?  ',
                                     style: GoogleFonts.outfit(
                                       fontSize: 18,
                                       color: Colors.white,
@@ -249,7 +216,7 @@ class Login extends StatelessWidget {
                                     ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: 'Signup',
+                                        text: 'Login',
                                         style: GoogleFonts.outfit(
                                           decoration: TextDecoration.underline,
                                           color: Color(0xff00C0FF),

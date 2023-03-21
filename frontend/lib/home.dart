@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mindrate/auth.dart';
+
+import 'login.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -46,7 +49,7 @@ class Home extends StatelessWidget {
               ],
             ),
             Expanded(child: SizedBox()),
-            Image.asset("assets/logo.png", width: 300),
+            Image.asset("assets/home_logo.png", width: 300),
             SizedBox(
               height: 40,
             ),
@@ -79,7 +82,10 @@ class Home extends StatelessWidget {
                   width: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context, CupertinoPageRoute(builder: (_) => Auth()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff10217D),
                     shape: RoundedRectangleBorder(
