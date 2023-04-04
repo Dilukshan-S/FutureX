@@ -8,11 +8,7 @@ import pandas as pd
 import math
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-import backend
 
-#loading the emotion values
-
-stressed,sadness,anxious = backend.emotions()
 
 # Helper Methods
 def buildGauss(frame, levels):
