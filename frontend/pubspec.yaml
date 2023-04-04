@@ -37,6 +37,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_fonts: ^4.0.3
+  firebase_core_desktop: ^1.0.2
+  firebase_auth_desktop: ^1.0.2
+  firebase_core: ^1.24.0
+  firebase_auth: ^3.11.2
+
+dependency_overrides:
+  firebase_core_platform_interface: 4.5.1
 
 dev_dependencies:
   flutter_test:
