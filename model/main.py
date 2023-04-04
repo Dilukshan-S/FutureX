@@ -150,9 +150,9 @@ while time.time() <t_end:
         cv2.imshow("Webcam Heart Rate Monitor", frame)
         print(list_bpm)
 
-        with open('Example.csv', 'w', newline='') as csvfile:
-            my_writer = csv.writer(csvfile, delimiter=' ')
-            my_writer.writerow(list_bpm)
+        #with open('Example.csv', 'w', newline='') as csvfile:
+            #my_writer = csv.writer(csvfile, delimiter=' ')
+            #my_writer.writerow(list_bpm)
 
 
 
