@@ -246,10 +246,10 @@ if len(sys.argv) != 2:
         highest_emotion = max(emotions)
         index = emotions.index(highest_emotion)
         if index == 0:
-            emotions = "stressed"
+            emotionfelt = "stressed"
         elif index == 1:
-            emotions= "sad"
+            emotionfelt= "sad"
         else:
-            emotions = "tired"
-        print("Are you feeling " + emotions + "?")
+            emotionfelt = "anxious"
+        print("Are you feeling " + emotionfelt + "?")
         print("If so, " + final_activity)
