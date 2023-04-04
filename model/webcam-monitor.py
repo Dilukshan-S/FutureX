@@ -1,10 +1,10 @@
 
-
 import numpy as np
 import cv2
 import sys
 import csv
 import time
+
 
 
 
@@ -87,6 +87,7 @@ bpmBufferIndex = 0
 bpmBufferSize = 10
 bpmBuffer = np.zeros((bpmBufferSize))
 
+
 i = 0
 while time.time() <t_end:
     ret, frame = webcam.read()
@@ -100,7 +101,7 @@ while time.time() <t_end:
     detectionFrame = frame[videoHeight//2:realHeight-videoHeight//2, videoWidth//2:realWidth-videoWidth//2, :]
 
     # Construct Gaussian Pyramid
-     videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
+    videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
     fourierTransform = np.fft.fft(videoGauss, axis=0)
 
     # Bandpass Filter
@@ -141,13 +142,11 @@ while time.time() <t_end:
 
     if len(sys.argv) != 2:
         cv2.imshow("Webcam Heart Rate Monitor", frame)
+        print(list_bpm)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            print(list_bpm)
-
-            with open('I:\cvs\Example.csv', 'w', newline='') as csvfile:
-                my_writer = csv.writer(csvfile, delimiter=',')
-                my_writer.writerow(list_bpm)
+        with open('Example.csv', 'w', newline='') as csvfile:
+            my_writer = csv.writer(csvfile, delimiter=' ')
+            my_writer.writerow(list_bpm)
 
 
 
@@ -155,7 +154,12 @@ while time.time() <t_end:
 
 
 
+        #if cv2.waitKey(1) & 0xFF == ord('q'):
+            #print(list_bpm)
 
+            #with open('Example.csv', 'w', newline='') as csvfile:
+                #my_writer = csv.writer(csvfile, delimiter='')
+                #my_writer.writerow(list_bpm)
 
 
 
