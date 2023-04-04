@@ -5,13 +5,14 @@ import sys
 import csv
 import time
 import pandas as pd
-import random
 import math
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+import backend
 
+#loading the emotion values
 
-
+stressed,sadness,anxious = backend.emotions()
 
 # Helper Methods
 def buildGauss(frame, levels):
@@ -232,7 +233,7 @@ if len(sys.argv) != 2:
     clf.fit(X_train, y_train)
 
     # Predict activities based on emotional states
-    emotions = [random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)]
+    emotions = [stressed, sadness, anxious]
     emotions_hrstuff = []
     emotions_hrstuff.extend(emotions)
     emotions_hrstuff.append(mean)
@@ -245,10 +246,10 @@ if len(sys.argv) != 2:
         highest_emotion = max(emotions)
         index = emotions.index(highest_emotion)
         if index == 0:
-            emotionfelt = "stressed"
+            emotions = "stressed"
         elif index == 1:
-            emotionfelt = "sad"
+            emotions= "sad"
         else:
-            emotionfelt = "tired"
-        print("Are you feeling " + emotionfelt + "?")
+            emotions = "tired"
+        print("Are you feeling " + emotions + "?")
         print("If so, " + final_activity)
