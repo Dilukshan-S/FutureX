@@ -6,6 +6,7 @@ import time
 import datetime
 
 
+def emotions():
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     model = load_model('emotion_detection_model.h5')
 
@@ -66,5 +67,6 @@ import datetime
         f.write(f"{percentage_anxiety:.2f}\n")
         f.write(f"{percentage_sad:.2f}\n")
         f.close()
-
+        
+    return percentage_angry_disgust,percentage_sad,percentage_anxiety
   
