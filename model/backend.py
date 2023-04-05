@@ -5,6 +5,7 @@ from keras.models import load_model
 import time
 import datetime
 
+
 def emotions():
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     model = load_model('emotion_detection_model.h5')
@@ -59,13 +60,12 @@ def emotions():
     print(f"Sad: {percentage_sad:.2f}")
 
     # Save data to file
-    now = datetime.datetime.now()
+ now = datetime.datetime.now()
     filename = f"negative_emotion_data_{now.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
     with open(filename, 'w') as f:
         f.write(f"{percentage_angry_disgust:.2f}\n")
         f.write(f"{percentage_anxiety:.2f}\n")
         f.write(f"{percentage_sad:.2f}\n")
         f.close()
-
+        
     return percentage_angry_disgust,percentage_sad,percentage_anxiety
-

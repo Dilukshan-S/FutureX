@@ -1,4 +1,3 @@
-
 import numpy as np
 import cv2
 import sys
@@ -93,7 +92,6 @@ bpmBufferIndex = 0
 bpmBufferSize = 10
 bpmBuffer = np.zeros((bpmBufferSize))
 
-
 i = 0
 while time.time() <t_end:
     ret, frame = webcam.read()
@@ -150,9 +148,9 @@ while time.time() <t_end:
         cv2.imshow("Webcam Heart Rate Monitor", frame)
         print(list_bpm)
 
-        #with open('Example.csv', 'w', newline='') as csvfile:
-            #my_writer = csv.writer(csvfile, delimiter=' ')
-            #my_writer.writerow(list_bpm)
+        with open('Example.csv', 'w', newline='') as csvfile:
+            my_writer = csv.writer(csvfile, delimiter=' ')
+            my_writer.writerow(list_bpm)
 
 
 
@@ -183,9 +181,7 @@ if len(sys.argv) != 2:
     originalVideoWriter.release()
 
 
-    ###################################Hiruni's Code##############################################################################################
-
-
+   
 
     def calculate_hrv(hr_values):
         # Step 1: Calculate the mean HR
@@ -218,8 +214,8 @@ if len(sys.argv) != 2:
     dwn_url = f"https://drive.google.com/uc?id={file_id}"
     data = pd.read_csv(dwn_url)
 
-    hr_values = [60, 65, 70, 75, 80, 85, 90, 95]
-    mean, hrv = calculate_hrv(hr_values)
+   # hr_values = [60, 65, 70, 75, 80, 85, 90, 95]
+    mean, hrv = calculate_hrv(list_bpm)
 
     # Split data into features and labels
     X = data.drop('activity', axis=1)
