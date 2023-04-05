@@ -246,6 +246,6 @@ if len(sys.argv) != 2:
         elif index == 1:
             emotions= "sad"
         else:
-            emotions = "tired"
+            emotions = "anxious"
         print("Are you feeling " + emotions + "?")
         print("If so, " + final_activity)
