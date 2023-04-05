@@ -60,7 +60,7 @@ def emotions():
     print(f"Sad: {percentage_sad:.2f}")
 
     # Save data to file
-    now = datetime.datetime.now()
+ now = datetime.datetime.now()
     filename = f"negative_emotion_data_{now.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
     with open(filename, 'w') as f:
         f.write(f"{percentage_angry_disgust:.2f}\n")
@@ -69,4 +69,3 @@ def emotions():
         f.close()
         
     return percentage_angry_disgust,percentage_sad,percentage_anxiety
-  
