@@ -88,4 +88,93 @@ bpmBufferIndex = 0
 bpmBufferSize = 10
 bpmBuffer = np.zeros((bpmBufferSize))
 
+i = 0
+while time.time() <t_end:
+    ret, frame = webcam.read()
+    if ret == False:
+        break
 
+    if len(sys.argv) != 2:
+        originalFrame = frame.copy()
+        originalVideoWriter.write(originalFrame)
+
+    detectionFrame = frame[videoHeight//2:realHeight-videoHeight//2, videoWidth//2:realWidth-videoWidth//2, :]
+
+    # Construct Gaussian Pyramid
+    videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
+    fourierTransform = np.fft.fft(videoGauss, axis=0)
+
+    # Bandpass Filter
+    fourierTransform[mask == False] = 0
+
+    # Grab a Pulse
+    if bufferIndex % bpmCalculationFrequency == 0:
+        i = i + 1
+        for buf in range(bufferSize):
+            fourierTransformAvg[buf] = np.real(fourierTransform[buf]).mean()
+        hz = frequencies[np.argmax(fourierTransformAvg)]
+        bpm = 60.0 * hz
+        bpmBuffer[bpmBufferIndex] = bpm
+        bpmBufferIndex = (bpmBufferIndex + 1) % bpmBufferSize
+
+    # Amplify
+    filtered = np.real(np.fft.ifft(fourierTransform, axis=0))
+    filtered = filtered * alpha
+
+    # Reconstruct Resulting Frame
+    filteredFrame = reconstructFrame(filtered, bufferIndex, levels)
+    outputFrame = detectionFrame + filteredFrame
+    outputFrame = cv2.convertScaleAbs(outputFrame)
+
+    bufferIndex = (bufferIndex + 1) % bufferSize
+
+    frame[videoHeight//2:realHeight-videoHeight//2, videoWidth//2:realWidth-videoWidth//2, :] = outputFrame
+    cv2.rectangle(frame, (videoWidth//2 , videoHeight//2), (realWidth-videoWidth//2, realHeight-videoHeight//2), boxColor, boxWeight)
+    if i > bpmBufferSize:
+
+        list_bpm.append(bpmBuffer.mean())
+
+        cv2.putText(frame, "BPM: %d" % bpmBuffer.mean(), bpmTextLocation, font, fontScale, fontColor, lineType)
+    else:
+        cv2.putText(frame, "Calculating BPM...", loadingTextLocation, font, fontScale, fontColor, lineType)
+
+    outputVideoWriter.write(frame)
+
+    if len(sys.argv) != 2:
+        cv2.imshow("Webcam Heart Rate Monitor", frame)
+        print(list_bpm)
+
+        with open('Example.csv', 'w', newline='') as csvfile:
+            my_writer = csv.writer(csvfile, delimiter=' ')
+            my_writer.writerow(list_bpm)
+
+
+
+
+
+
+
+        #if cv2.waitKey(1) & 0xFF == ord('q'):
+            #print(list_bpm)
+
+            #with open('Example.csv', 'w', newline='') as csvfile:
+                #my_writer = csv.writer(csvfile, delimiter='')
+                #my_writer.writerow(list_bpm)
+
+
+
+
+    if len(sys.argv) != 2:
+        cv2.imshow("Webcam Heart Rate Monitor", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+webcam.release()
+cv2.destroyAllWindows()
+outputVideoWriter.release()
+if len(sys.argv) != 2:
+    originalVideoWriter.release()
+
+
+    ###################################Hiruni's Code##############################################################################################
