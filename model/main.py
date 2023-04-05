@@ -128,7 +128,7 @@ while time.time() <t_end:
     filtered = filtered * alpha
 
     # Reconstruct Resulting Frame
-    filteredFrame = reconstructFrame(filtered, bufferIndex, levels)
+filteredFrame = reconstructFrame(filtered, bufferIndex, levels)
     outputFrame = detectionFrame + filteredFrame
     outputFrame = cv2.convertScaleAbs(outputFrame)
 
