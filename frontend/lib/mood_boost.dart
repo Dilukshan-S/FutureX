@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mindrate/resources_page.dart';
 
 class MoodBoost extends StatelessWidget {
   @override
@@ -215,48 +216,55 @@ class MoodBoost extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(80),
-                        topRight: Radius.circular(80),
-                        bottomRight: Radius.circular(70),
-                        bottomLeft: Radius.circular(10)),
-                  ),
-                  elevation: 5,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(30),
-                        child: Image.asset("assets/boost_img.png",
-                            height: 100, width: 70),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xff5A4AE3), Color(0xff10217D)],
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                            ),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomRight: Radius.circular(100),
-                                bottomLeft: Radius.circular(10)),
-                            border: Border.all(color: Colors.white, width: 3)),
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 35),
-                            child: Text(
-                              "Resources & Support",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (_) => ResourcesPage()));
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(80),
+                          topRight: Radius.circular(80),
+                          bottomRight: Radius.circular(70),
+                          bottomLeft: Radius.circular(10)),
+                    ),
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(30),
+                          child: Image.asset("assets/boost_img.png",
+                              height: 100, width: 70),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xff5A4AE3), Color(0xff10217D)],
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(100),
+                                  bottomLeft: Radius.circular(10)),
+                              border:
+                                  Border.all(color: Colors.white, width: 3)),
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 35),
+                              child: Text(
+                                "Resources & Support",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Card(
