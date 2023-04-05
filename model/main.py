@@ -94,34 +94,36 @@ bpmBufferSize = 10
 bpmBuffer = np.zeros((bpmBufferSize))
 
 
-i = 0
+i=0
 while time.time() <t_end:
-    ret, frame = webcam.read()
-    if ret == False:
-        break
+   ret, frame = webcam.read()
+   if ret == False:
+       break
 
-    if len(sys.argv) != 2:
-        originalFrame = frame.copy()
-        originalVideoWriter.write(originalFrame)
+   if len(sys.argv) != 2:
+       originalFrame = frame.copy()
+       originalVideoWriter.write(originalFrame)
 
-    detectionFrame = frame[videoHeight//2:realHeight-videoHeight//2, videoWidth//2:realWidth-videoWidth//2, :]
+detectionFrame = frame[videoHeight//2:realHeight-videoHeight//2, videoWidth//2:realWidth-videoWidth//2, :]
 
-    # Construct Gaussian Pyramid
-    videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
-    fourierTransform = np.fft.fft(videoGauss, axis=0)
+   # Construct Gaussian Pyramid
+   videoGauss[bufferIndex] = buildGauss(detectionFrame, levels+1)[levels]
+   fourierTransform = np.fft.fft(videoGauss, axis=0)
 
-    # Bandpass Filter
-    fourierTransform[mask == False] = 0
+   # Bandpass Filter
+   fourierTransform[mask == False] = 0
 
-    # Grab a Pulse
-    if bufferIndex % bpmCalculationFrequency == 0:
-        i = i + 1
-        for buf in range(bufferSize):
-            fourierTransformAvg[buf] = np.real(fourierTransform[buf]).mean()
-        hz = frequencies[np.argmax(fourierTransformAvg)]
-        bpm = 60.0 * hz
-        bpmBuffer[bpmBufferIndex] = bpm
-        bpmBufferIndex = (bpmBufferIndex + 1) % bpmBufferSize
+   # Grab a Pulse
+   if bufferIndex % bpmCalculationFrequency == 0:
+       i = i + 1
+       for buf in range(bufferSize):
+           fourierTransformAvg[buf] = np.real(fourierTransform[buf]).mean()
+       hz = frequencies[np.argmax(fourierTransformAvg)]
+       bpm = 60.0 * hz
+       bpmBuffer[bpmBufferIndex] = bpm
+       bpmBufferIndex = (bpmBufferIndex + 1) % bpmBufferSize
+
+
 
     # Amplify
     filtered = np.real(np.fft.ifft(fourierTransform, axis=0))
