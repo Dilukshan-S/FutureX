@@ -1,11 +1,137 @@
+import 'dart:async';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mindrate/login.dart';
 
+import 'home.dart';
+
 class SignUp extends StatelessWidget {
-  const SignUp({Key? key}) : super(key: key);
+  SignUp({Key? key}) : super(key: key);
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void signUp(BuildContext context) async {
+
+    showDialog(
+        context: context,
+        builder: (context){
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+    );
+
+    try{
+      await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      User user = _auth.currentUser!;
+
+      String newDisplayName = nameController.text.trim();
+
+      await user.updateDisplayName(newDisplayName).then((_) {
+        print("Display name updated successfully");
+        print("Name: "+user.displayName!);
+      }).catchError((error) {
+        print("Error updating display name: $error");
+      });
+
+      Navigator.pop(context);
+
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        duration: Duration(seconds: 5),
+        dismissDirection: DismissDirection.horizontal,
+        content: AwesomeSnackbarContent(
+          title: "Hooooooray !",
+          message: 'Your Account Successfully Created',
+
+          contentType: ContentType.success,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+
+      Navigator.of(context).pushAndRemoveUntil(
+          CupertinoPageRoute(builder: (context) => Home()),
+              (Route<dynamic> route) => false);
+
+    } on FirebaseAuthException catch (e){
+      Navigator.pop(context);
+      if (e.code == 'weak-password') {
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          duration: Duration(seconds: 5),
+          dismissDirection: DismissDirection.horizontal,
+          content: AwesomeSnackbarContent(
+            title: "Oooooops!",
+            message: 'The password provided is too weak',
+
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
+      } else if (e.code == 'email-already-in-use') {
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          duration: Duration(seconds: 5),
+          dismissDirection: DismissDirection.horizontal,
+          content: AwesomeSnackbarContent(
+            title: "Oooooops!",
+            message: 'The account already exists for that email',
+
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    } catch (e) {
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        duration: Duration(seconds: 5),
+        dismissDirection: DismissDirection.horizontal,
+        content: AwesomeSnackbarContent(
+          title: "Oooooops!",
+          message: e.toString(),
+
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +146,6 @@ class SignUp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BackButton(
-              color: Colors.white,
-            ),
             SizedBox(
               width: 600,
             ),
@@ -54,6 +177,7 @@ class SignUp extends StatelessWidget {
                             height: 40,
                           ),
                           TextField(
+                            controller: nameController,
                               style: GoogleFonts.poppins(
                                   color: Color(0xffA4A6B3),
                                   fontSize: 18,
@@ -85,6 +209,7 @@ class SignUp extends StatelessWidget {
                             height: 20,
                           ),
                           TextField(
+                            controller: emailController,
                               style: GoogleFonts.poppins(
                                   color: Color(0xffA4A6B3),
                                   fontSize: 18,
@@ -116,6 +241,7 @@ class SignUp extends StatelessWidget {
                             height: 20,
                           ),
                           TextField(
+                            controller: passwordController,
                               style: GoogleFonts.poppins(
                                   color: Color(0xffA4A6B3),
                                   fontSize: 18,
@@ -148,6 +274,7 @@ class SignUp extends StatelessWidget {
                             height: 20,
                           ),
                           TextField(
+                            controller: confirmPasswordController,
                               style: GoogleFonts.poppins(
                                   color: Color(0xffA4A6B3),
                                   fontSize: 18,
@@ -181,7 +308,7 @@ class SignUp extends StatelessWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              FirebaseAuth.instance.signOut();
+                              signUp(context);
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xffAAA3E9)),

@@ -11,7 +11,7 @@ def emotions():
     model = load_model('emotion_detection_model.h5')
 
     emotion_labels = ['Angry', 'Disgust', 'Anxiety', 'Happy', 'Neutral', 'Sad', 'Surprise']
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("video_capture.mp4")
     fps = cap.get(cv2.CAP_PROP_FPS)
     start_time = time.time()
     frames = []
@@ -40,12 +40,8 @@ def emotions():
             cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             images.append(img)
             frames.append(label_text)
-        cv2.imshow('img', img)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
 
     cap.release()
-    cv2.destroyAllWindows()
 
     # Calculate percentage of different emotions
     angry_disgust_count = emotions['Angry'] + emotions['Disgust']
@@ -60,7 +56,7 @@ def emotions():
     print(f"Sad: {percentage_sad:.2f}")
 
     # Save data to file
- now = datetime.datetime.now()
+    now = datetime.datetime.now()
     filename = f"negative_emotion_data_{now.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
     with open(filename, 'w') as f:
         f.write(f"{percentage_angry_disgust:.2f}\n")

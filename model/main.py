@@ -171,11 +171,8 @@ while time.time() <t_end:
     if len(sys.argv) != 2:
         cv2.imshow("Webcam Heart Rate Monitor", frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
 
 webcam.release()
-cv2.destroyAllWindows()
 outputVideoWriter.release()
 if len(sys.argv) != 2:
     originalVideoWriter.release()

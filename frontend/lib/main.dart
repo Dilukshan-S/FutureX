@@ -1,14 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:local_notifier/local_notifier.dart';
 import 'package:mindrate/home.dart';
 import 'package:mindrate/mood_boost.dart';
+import 'package:window_manager/window_manager.dart';
 import 'firebase_options.dart';
 import 'landing_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Firestore.initialize("mindrate-3b9a1");
   // Add in main method.
   await localNotifier.setup(
     appName: 'MindRate',
@@ -17,6 +20,20 @@ void main() async {
   );
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = WindowOptions(
+    size: Size(1280, 800),
+    center: true,
+
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.setResizable(false);
+    await windowManager.setMaximizable(false);
+    await windowManager.focus();
+  });
 
   runApp(MyApp());
 }

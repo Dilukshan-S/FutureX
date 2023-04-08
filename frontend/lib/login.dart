@@ -1,7 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mindrate/home.dart';
 import 'package:mindrate/signup.dart';
 
 class Login extends StatelessWidget {
@@ -24,17 +26,91 @@ class Login extends StatelessWidget {
         email: emailController.text,
         password: passwordController.text,
       );
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        duration: Duration(seconds: 5),
+        dismissDirection: DismissDirection.horizontal,
+        content: AwesomeSnackbarContent(
+          title: "Hooooooray !",
+          message: 'Your are successfully accessed to the account',
+
+          contentType: ContentType.success,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+        Navigator.pop(context);
+
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(builder: (context) => Home()),
+                (Route<dynamic> route) => false);
+
     } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+
       if (e.code == 'user-not-found') {
-        print('No user found for that email');
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          duration: Duration(seconds: 5),
+          dismissDirection: DismissDirection.horizontal,
+          content: AwesomeSnackbarContent(
+            title: "Oooooops!",
+            message: 'No user found for that email',
+
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
       } else if (e.code == 'wrong-password') {
-        print('Incorrect Password');
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          duration: Duration(seconds: 5),
+          dismissDirection: DismissDirection.horizontal,
+          content: AwesomeSnackbarContent(
+            title: "Oooooops!",
+            message: 'Incorrect Password',
+
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+
       } else if (e.code == 'invalid-email') {
-        print('Email is invalid');
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          duration: Duration(seconds: 5),
+          dismissDirection: DismissDirection.horizontal,
+          content: AwesomeSnackbarContent(
+            title: "Oooooops!",
+            message: 'Email is invalid',
+
+            contentType: ContentType.failure,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
       }
     }
-
-    Navigator.pop(context);
   }
 
   @override
@@ -50,9 +126,6 @@ class Login extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BackButton(
-              color: Colors.white,
-            ),
             SizedBox(
               width: 600,
             ),
@@ -234,11 +307,9 @@ class Login extends StatelessWidget {
                             cursor: SystemMouseCursors.click,
                             child: GestureDetector(
                               onTap: () => {
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (_) => SignUp()))
-                              },
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    CupertinoPageRoute(builder: (context) => SignUp()),
+                                        (Route<dynamic> route) => false)},
                               child: RichText(
                                 text: TextSpan(
                                     text: 'Don\'t have an account?  ',

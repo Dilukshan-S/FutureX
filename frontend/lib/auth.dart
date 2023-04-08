@@ -6,17 +6,15 @@ import 'package:mindrate/login.dart';
 import 'package:mindrate/signup.dart';
 
 class Auth extends StatelessWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  getCurrentUser(){
+    User? user = _auth.currentUser;
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Home();
-        } else {
-          return Login();
-        }
-      },
-    );
+    return getCurrentUser() == null ? Login() : Home();
   }
 }

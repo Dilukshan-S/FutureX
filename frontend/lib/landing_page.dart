@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mindrate/about_us.dart';
 import 'package:mindrate/auth.dart';
 
 import 'login.dart';
@@ -35,12 +39,21 @@ class LandingPage extends StatelessWidget {
                 SizedBox(
                   width: 25,
                 ),
-                Text(
-                  "About Us",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xff2E4450),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => AboutUs()));
+                    },
+                    child: Text(
+                      "About Us",
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff2E4450),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -83,9 +96,9 @@ class LandingPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context, CupertinoPageRoute(builder: (_) => Auth()));
-                  },
+                    Navigator.of(context).pushAndRemoveUntil(
+                        CupertinoPageRoute(builder: (context) => Auth()),
+                            (Route<dynamic> route) => false);},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff10217D),
                     shape: RoundedRectangleBorder(
