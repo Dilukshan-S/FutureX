@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
     }
 
     // Wait for 15 seconds
-    await Future.delayed(Duration(seconds: 15));
+    await Future.delayed(Duration(seconds: 30));
 
     // Stop recording
     XFile videoFile = await cameraController.stopVideoRecording();
@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
   Future<void> uploadVideo(File videoFile) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:1010/api'),
+      Uri.parse('http://167.71.193.18:1010/api'),
     );
 
     // Set the file field name and file content
@@ -315,7 +315,7 @@ class _HomeState extends State<Home> {
                     try {
                       //todo: Change Time
                       periodicTimer =
-                          Timer.periodic(Duration(seconds: 30), (timer) async {
+                          Timer.periodic(Duration(seconds: 60), (timer) async {
                         try {
                           print("Called");
                           await recordVideo(context);
