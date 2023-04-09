@@ -27,8 +27,11 @@ async def process(request):
         # Create a unique filename to avoid conflicts
         filename =  'video_capture.mp4'
 
+        filename = 'my_video.mp4'
+        full_path = 'C:/Users/chxxx/OneDrive/Desktop/MindRate/model/test/' + filename
+
         # Save the file to disk
-        with open('/root/server_code/' + filename, 'wb') as f:
+        with open(full_path, 'wb') as f:
             while True:
                 chunk = await video_file.read_chunk()
                 if not chunk:

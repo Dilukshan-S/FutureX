@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
   Future<void> uploadVideo(File videoFile) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://167.71.193.18:1010/api'),
+      Uri.parse('http://localhost:1010/api'),
     );
 
     // Set the file field name and file content
