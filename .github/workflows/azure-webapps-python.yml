@@ -1,86 +1,86 @@
-# This workflow will build and push a Python application to an Azure Web App when a commit is pushed to your default branch.
-#
-# This workflow assumes you have already created the target Azure App Service web app.
-# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=bash&pivots=python-framework-flask
-#
-# To configure this workflow:
-#
-# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
-#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
-#
-# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
-#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
-#
-# 3. Change the value for the AZURE_WEBAPP_NAME. Optionally, change the PYTHON_VERSION environment variables below.
-#
-# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
-# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
+# .github/workflows/ci-cd.yml
 
-name: Build and deploy Python app to Azure Web App
-
-env:
-  AZURE_WEBAPP_NAME: your-app-name  # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.8'              # set this to the Python version to use
+name: CI/CD Desktop Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
+    branches: [ main ]
+    tags: ['v*.*.*']         # Triggers on version tags like v1.2.3 :contentReference[oaicite:2]{index=2}
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:         # Allows manual runs
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_test_package:
+    runs-on: ubuntu-latest    # Use windows-latest or macos-latest for other OSes
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]  # Build all three :contentReference[oaicite:3]{index=3}
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4                           # Clones repo :contentReference[oaicite:4]{index=4}
 
-      - name: Set up Python version
-        uses: actions/setup-python@v3.0.0
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2                    # Installs Flutter on all OSes :contentReference[oaicite:5]{index=5}
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-
-      - name: Create and start virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
+          channel: stable
+          flutter-version: '3.19.0'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: flutter pub get                               # Fetch Dart & Flutter packages :contentReference[oaicite:6]{index=6}
 
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Static analysis
+        run: flutter analyze                               # Lint and style checks :contentReference[oaicite:7]{index=7}
 
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v3
+      - name: Run unit & widget tests
+        run: flutter test                                  # Validates code functionality :contentReference[oaicite:8]{index=8}
+
+      - name: Enable desktop support
+        if: matrix.os == 'windows-latest'
+        run: flutter config --enable-windows-desktop        # Windows only :contentReference[oaicite:9]{index=9}
+
+      - name: Build desktop app
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            flutter build linux --release
+            FILE=build/linux/x64/release/bundle
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            flutter build macos --release
+            FILE=build/macos/Build/Products/Release
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            flutter build windows --release
+            FILE=build/windows/runner/Release
+          fi
+
+      - name: Package build output
+        run: |
+          mkdir -p release
+          cd $FILE
+          zip -r ../../release/mindrate-${{ matrix.os }}.zip *
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4                      # Artifacts visible under Actions UI :contentReference[oaicite:10]{index=10}
         with:
-          name: python-app
-          path: |
-            .
-            !venv/
+          name: mindrate-${{ matrix.os }}
+          path: release/mindrate-${{ matrix.os }}.zip
 
-  deploy:
-    permissions:
-      contents: none
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: create_release
+        uses: actions/create-release@v1
         with:
-          name: python-app
-          path: .
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false                                 # Toggle for beta :contentReference[oaicite:11]{index=11}
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+      - name: Upload Release Assets
+        if: steps.create_release.outputs.upload_url
+        uses: actions/upload-release-asset@v1
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/mindrate-${{ matrix.os }}.zip
+          asset_name: mindrate-${{ github.ref_name }}-${{ matrix.os }}.zip
+          asset_content_type: application/zip               # Correct MIME type :contentReference[oaicite:12]{index=12}
