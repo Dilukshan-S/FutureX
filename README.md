@@ -1,9 +1,22 @@
-# FutureX - MindRate
+# MindRate
 
-A desktop application that aims to regulate negative emotions of the user
+MindRate is a desktop application built with Flutter that monitors users’ affective state by extracting heart rate and emotion metrics from live video feeds, and then offers personalized wellness suggestions.
 
-The application takes in user's video as input then analyses it to obtain the heart rate and emotion values of the user
+## 📝 Features
+- **Real‑time Video Analysis**: Captures webcam input and processes facial cues.  
+- **Heart Rate Extraction**: Estimates pulse via subtle skin‐color changes.  
+- **Emotion Recognition**: Classifies emotions (e.g., happy, sad, stressed).  
+- **Personalized Suggestions**: Recommends breathing exercises, music, or tips based on detected state.  
 
-Then from the heart rate, average heart rate and then heart rate variability is calculated.
+## 🚀 Getting Started
 
-Then the emotion values and the above 2 values are passed to the suggestion model to obtain the appropriate suggestion for the user
+### Prerequisites
+- **Flutter SDK** ≥ 3.0 installed ([install guide][flutter-install])  
+- A modern **webcam** for video input  
+- **Git**  
+
+### Installation
+1. Clone the repo  
+   ```bash
+   git clone https://github.com/Dilukshan-S/FutureX.git
+   cd FutureX
